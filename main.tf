@@ -3,7 +3,7 @@ terraform {
   required_providers {
     azurerm = {
       source  = "hashicorp/azurerm"
-      version = "3.102.0"
+      version = "3.104.2"
     }
   }
 
@@ -14,7 +14,13 @@ provider "azurerm" {
   features {}
 }
 
-resource "azurerm_resource_group" "rg" {
+data "azurerm_resource_group" "rg" {
   name     = var.rg_name
   location = var.location
+}
+resource "azurerm_virtual_network" "example" {
+  name                = "example-network"
+  resource_group_name = data.azurerm_resource_group.rg.name
+  location            = var.location
+  address_space       = ["10.0.0.0/16"]
 }
